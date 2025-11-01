@@ -29,21 +29,19 @@ var<private> UVS: array<vec2f, 6> = array<vec2f, 6>(
 
 @vertex
 fn vs_main(@builtin(vertex_index) in_vertex_index: u32) -> VertexOutput {
-    // TODO: Create a VertexOutput and fill in the clip_position and uv
-
-
     var out: VertexOutput;
-    // TODO: Set the clip position and UV coordinates
-    out.clip_position = vec4f(0.0, 0.0, 0.0, 1.0); // Replace this line
-    out.uv = vec2f(0.0, 0.0); // Replace this line
+    // Set position and UV coordinates from the pre-defined arrays
+    let pos = POSITIONS[in_vertex_index];
+    let uv = UVS[in_vertex_index];
+    
+    // Set the clip position (position in NDC space) and UV coordinates
+    out.clip_position = vec4f(pos, 0.0, 1.0);
+    out.uv = uv;
     return out;
 }
 
 @fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4f {
-    // TODO: Sample the texture at the UV coordinates
-    // Hint: Use textureSample(texture, sampler, uv_coordinates)
-
-    // TODO: Sample and return the texture color
-    return vec4f(1.0, 0.0, 1.0, 1.0); // Replace with textureSample
+    // Sample the texture at the UV coordinates using the provided sampler
+    return textureSample(my_texture, my_sampler, in.uv);
 }
